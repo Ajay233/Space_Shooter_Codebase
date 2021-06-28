@@ -34,12 +34,10 @@ public class SpawnManager : MonoBehaviour
         {
             if (waveNumber % 2 == 0)
             {
-                Debug.Log("Spawning Enemies");
                 Enemy enemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8.8f, 8.8f), 7, 0), Quaternion.identity);
                 enemy.transform.parent = _enemyContainer.transform;   // We have to assign a transform to a transform
             } else
             {
-                Debug.Log("Spawning Asteroids");
                 Asteroid asteroid = Instantiate(_asteroidPrefab, new Vector3(Random.Range(-8.8f, 8.8f), 7, 0), Quaternion.identity);
                 asteroid.transform.parent = _asteroidContainer.transform; // Adds the asteroid prefab to the asteroidContainer while it's active
             }

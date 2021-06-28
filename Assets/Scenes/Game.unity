@@ -2267,6 +2267,7 @@ MonoBehaviour:
   _waveCompleteText: {fileID: 1365453399}
   _warningText: {fileID: 371361208}
   _waveNumberText: {fileID: 73912717}
+  _warningClip: {fileID: 8300000, guid: 3d8d6d92788b7c3468a57c4c8305868c, type: 3}
 --- !u!82 &1201977561
 AudioSource:
   m_ObjectHideFlags: 0
