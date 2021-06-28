@@ -119,7 +119,7 @@ public class UIManager : MonoBehaviour
         _warningText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1);
         _warningText.gameObject.SetActive(false);
-        _audioSource.Pause();
+        _audioSource.Stop();
         _audioSource.volume = 1;
         yield return new WaitForSeconds(1);
         _waveNumberText.text = "Wave - " + waveNumber + " INCOMING";  // Could make this more specific later on
