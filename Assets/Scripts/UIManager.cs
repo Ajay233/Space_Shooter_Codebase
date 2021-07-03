@@ -33,7 +33,7 @@ public class UIManager : MonoBehaviour
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
         _restartInstructions.gameObject.SetActive(false);
-        _panel = transform.GetChild(7);
+        _panel = transform.GetChild(9);
         if (_panel == null)
         {
             Debug.LogError("Unable to find the UI Panel");

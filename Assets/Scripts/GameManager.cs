@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,23 +46,48 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R) && _isGameOver)
+        //if (Input.GetKeyDown(KeyCode.R) && _isGameOver)
+        //{
+        //    SceneManager.LoadScene(1); // Load current game scene
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    Application.Quit();
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    Time.timeScale = 0;
+        //    _uIManager.OpenPauseMenu();
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.M))
+        //{
+        //    UnPauseGame();
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.M))
+        //{
+        //    UnPauseGame();
+        //}
+
+        if (Keyboard.current.rKey.wasPressedThisFrame && _isGameOver)
         {
             SceneManager.LoadScene(1); // Load current game scene
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             Application.Quit();
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Keyboard.current.pKey.wasPressedThisFrame)
         {
-            Time.timeScale = 0;
-            _uIManager.OpenPauseMenu();
+            PauseGame();
         }
 
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Keyboard.current.mKey.wasPressedThisFrame)
         {
             UnPauseGame();
         }
@@ -73,6 +99,12 @@ public class GameManager : MonoBehaviour
             _uIManager.ShowWaveComplete();
             StartWave();
         }
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+        _uIManager.OpenPauseMenu();
     }
 
     public void GameOver()

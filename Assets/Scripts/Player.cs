@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -41,6 +42,12 @@ public class Player : MonoBehaviour
 
     private AudioSource _audioSource;
     private Animator _playerAnimator;
+
+    private Vector2 _inputVal;
+    private Vector3 _movement;
+    private InputActionReference _inputActionReference;
+    private PlayerInput _playerInput;
+
 
     // Start is called before the first frame update
     void Start()
@@ -94,18 +101,27 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Unable to find Player Animator");
         }
+
+        _playerInput = gameObject.GetComponent<PlayerInput>();
+
     }
+
+    void OnMove(InputValue value) {
+        _inputVal = value.Get<Vector2>();
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        CalculateMovement();
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFire)
-        {
-            UseLaser();
-        }
-
-        AnimatePlayerTurns();
+        //CalculateMovement();
+        // if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFire)
+        // {
+        //     UseLaser();
+        // }
+        //_inputVal = _playerInput.actions["Move"].ReadValue<Vector2>();
+        CalcMoveFromInputSystem();
+       // AnimatePlayerTurns();
     }
 
     void CalculateMovement()
@@ -160,10 +176,51 @@ public class Player : MonoBehaviour
         //}
     }
 
-    void UseLaser()
+
+    // This method is assigned to the 'Move action and is executed whenever that action is triggered'
+    public void GetInputVal(InputAction.CallbackContext context)
     {
-        
-        if (Input.GetKeyDown(KeyCode.Space) &&  Time.time > _nextFire)
+        // Janky as if there is a delay with the joystick.  
+        // To use this, pass in the following to GetInputVal: InputAction.CallbackContext context 
+        //_inputVal = context.ReadValue<Vector2>();
+
+        // Smooth but out of control
+        _inputVal = _playerInput.actions["Move"].ReadValue<Vector2>();
+        //_movement = new Vector3(_inputVal.x, _inputVal.y, 0).normalized;
+        Debug.Log("Executing the move finction");
+        //Debug.Log("x = " + context.ReadValue<Vector2>().x);
+        //Debug.Log("y = " + context.ReadValue<Vector2>().y);
+    }
+
+
+    public void CalcMoveFromInputSystem()
+    {
+        // Janky, as if there is a delay with the joystick 
+        //_inputVal = _playerInput.actions["Move"].ReadValue<Vector2>();
+        _movement = new Vector3(_inputVal.x, _inputVal.y, 0).normalized;
+        //Debug.Log("x = " + _inputVal.x);
+        //Debug.Log("y = " + _inputVal.y);
+        transform.Translate(_movement * _speed * Time.deltaTime);
+
+        // Prevents going off screen vertically
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 5.8f), 0);
+
+        // This does wrapping, so the player can exit one side and re-enter the screen on the other side
+        if (transform.position.x >= 11)
+        {
+            transform.position = new Vector3(-11, transform.position.y, 0);
+        }
+        else if (transform.position.x <= -11)
+        {
+            transform.position = new Vector3(11, transform.position.y, 0);
+        }
+    }
+
+    public void UseLaser()
+    {
+
+        //if (Input.GetKeyDown(KeyCode.Space) &&  Time.time > _nextFire)
+        if (Time.time > _nextFire)
         {
             _nextFire = Time.time + _fireRate;
 
